@@ -16,7 +16,7 @@ def shannon(word):
 
     occ = {}
     for c in word:
-        if not c in occ:
+        if c not in occ:
             occ[c] = 0
         occ[c] += 1
 

@@ -40,20 +40,20 @@ TLDList = None
 for row in csv_in:
     url = row['url'].strip()
 
-    if TLDList == None:
+    if TLDList is None:
         try:
             l = "pouet"
             if 'list' in row:
                 l = row['list'].strip().lower()
             TLDList = ut_parse_lib.loadTLDFile(l)
         except Exception as e:
-            logger.error("Failed to load TLD list with error: %s" % str(e))
+            logger.error(f"Failed to load TLD list with error: {str(e)}")
 
     try:
         res = ut_parse_lib.parse_extended(url, TLDList)
         row.update(res)
     except Exception as e:
-        logger.error("Got error %s on with url %s" % (str(e), url))
+        logger.error(f"Got error {str(e)} on with url {url}")
 
     # return row to Splunk
     csv_out.writerow(row)

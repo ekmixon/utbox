@@ -18,24 +18,20 @@ def loadWordlist():
     f_path = os.path.join(os.path.dirname(os.path.realpath(__file__)),
                           "meaning.dic")
 
-    f_in = open(f_path, "r")
-    WORDLIST = {}
+    with open(f_path, "r") as f_in:
+        WORDLIST = {}
 
-    line = f_in.readline()
-    while line:
-        line = line.lower().strip()
-        le = len(line)
+        while line := f_in.readline():
+            line = line.lower().strip()
+            le = len(line)
 
-        # do we have a words of the same size already?
-        if not le in WORDLIST:
-            WORDLIST[le] = []
+                    # do we have a words of the same size already?
+            if le not in WORDLIST:
+                WORDLIST[le] = []
 
-        # check required in case of duplicated words.
-        if not line in WORDLIST[le]:
-            WORDLIST[le].append(re.compile(line))
-
-        line = f_in.readline()
-    f_in.close()
+                    # check required in case of duplicated words.
+            if line not in WORDLIST[le]:
+                WORDLIST[le].append(re.compile(line))
 
     return WORDLIST
 
@@ -47,7 +43,7 @@ def meaning(WORDLIST, word):
     s_len = 0
 
     for i in range(wlen, 0, -1):
-        if not i in WORDLIST:
+        if i not in WORDLIST:
             continue
 
         for preg_t in WORDLIST[i]:
@@ -56,11 +52,7 @@ def meaning(WORDLIST, word):
                 word = preg_t.sub(".", word)
                 s_len += i
 
-    ratio = 0.0
-    if s_len:
-        ratio = float(s_len) / float(wlen)
-
-    return ratio
+    return float(s_len) / float(wlen) if s_len else 0.0
 
 
 ########

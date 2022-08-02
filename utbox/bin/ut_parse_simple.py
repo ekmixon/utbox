@@ -29,7 +29,7 @@ for row in csv_in:
 		res = ut_parse_lib.parse_simple(url)
 		row.update( res )
 	except Exception as e:
-		logger.error("Got error %s on with url %s" % (str(e), url))
+		logger.error(f"Got error {str(e)} on with url {url}")
 
 	# return row to Splunk
 	csv_out.writerow(row)

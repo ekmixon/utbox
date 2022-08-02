@@ -10,10 +10,10 @@ def ngramsplit(word, length):
 	"""
     grams = {}
 
-    for i in range(0, len(word) - length + 1):
+    for i in range(len(word) - length + 1):
         g = word[i:i + length]
 
-        if not g in grams:
+        if g not in grams:
             grams[g] = 0
         grams[g] += 1
     return grams
@@ -25,21 +25,17 @@ def loadFile(f_name, gram_size=2):
     LIST = {}
     entries = 0
 
-    f_in = open(f_path, "r")
-    line = f_in.readline()
-    while line:
-        line = line.lower().strip()
-        grams = ngramsplit(line, gram_size)
-        entries += 1
+    with open(f_path, "r") as f_in:
+        while line := f_in.readline():
+            line = line.lower().strip()
+            grams = ngramsplit(line, gram_size)
+            entries += 1
 
-        for g in grams:
-            if not g in LIST:
-                LIST[g] = 0
+            for g in grams:
+                if g not in LIST:
+                    LIST[g] = 0
 
-            LIST[g] += grams[g]
-
-        line = f_in.readline()
-    f_in.close()
+                LIST[g] += grams[g]
 
     return (entries, LIST)
 
@@ -57,7 +53,7 @@ def bayescore(word, n_good, set_good, n_bad, set_bad, gram_size=2):
     grams = ngramsplit(word, gram_size)
     for g in grams:
 
-        if not g in set_bad or not g in set_good:
+        if g not in set_bad or g not in set_good:
             continue
 
         # probability that the gram X appears in bad domains

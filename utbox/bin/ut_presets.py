@@ -4,11 +4,11 @@ import csv
 import json
 
 # a-z
-set_az = set(chr(c) for c in range(0x61, 0x7b))
-set_AZ = set(chr(c) for c in range(0x41, 0x5B))
+set_az = {chr(c) for c in range(0x61, 0x7b)}
+set_AZ = {chr(c) for c in range(0x41, 0x5B)}
 set_aZ = set_az ^ set_AZ
-set_09 = set(chr(c) for c in range(0x30, 0x40))
-set_printable = set(chr(c) for c in range(0x20, 0x7F))
+set_09 = {chr(c) for c in range(0x30, 0x40)}
+set_printable = {chr(c) for c in range(0x20, 0x7F)}
 
 # pouet    : all lowercase
 # pouet_up : all uppercase
@@ -40,7 +40,7 @@ PRESETS = {
 PATTERNS = {}
 #re.compile("([0123456789]+)")
 for (pname, pchars) in PRESETS.items():
-    re_str = "([%s]+)" % re.escape(''.join(pchars))
+    re_str = f"([{re.escape(''.join(pchars))}]+)"
     PATTERNS[pname] = re.compile(re_str)
 
 preg_arobse = re.compile("@")
@@ -75,7 +75,7 @@ def suites(word, wordset):
     for s in sets:
         print(s)
 
-        if not s in PRESETS:
+        if s not in PRESETS:
             continue
 
         preg = PATTERNS[s]
@@ -87,6 +87,6 @@ def suites(word, wordset):
             if l > max:
                 max = l
         label = preg_arobse.sub('', s)
-        ret['ut_max_suite_%s' % label] = max
+        ret[f'ut_max_suite_{label}'] = max
 
     return ret
